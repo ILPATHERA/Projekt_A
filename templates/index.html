@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Image Classifier</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #E8DED1;
+      }
+      h2 {
+        font-size: 3em;
+        text-align: center;
+        margin-bottom: 1em;
+      }
+      form {
+        text-align: center;
+      }
+      label {
+        font-size: 0.9em;
+      }
+      input[type="file"] {
+        display: none;
+      }
+      .button {
+        display: inline-block;
+        background-color: #BFAA8c;
+        border: none;
+        color: black;
+        padding: 0.5em 1em;
+        text-align: center;
+        text-decoration: none;
+        font-size: 0.75em;
+        margin-top: 1em;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #A48F7a;
+      }
+      #image-container {
+        display: flex;
+        justify-content: center;
+      }
+      #image-container img {
+        max-width: 30%;
+        display: none;
+      }
+      #uploaded-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 30%;
+      }
+
+      #select-image-button {
+        background-color: #BFAA8c;
+        border: none;
+        color: black;
+        padding: 0.5em 1em;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1.5em;
+        margin-top: 1em;
+        cursor: pointer;
+      }
+
+      #select-image-button:hover {
+    background-color: #A48F7a;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h2>Image Classifier</h2>
+      <form id="form" method="post" enctype="multipart/form-data" action="/predict">
+        <label for="image">Bitte Bild zum Klassifizieren auswählen und dann auf Klassifizieren klicken:</label>
+        <br>
+        <button class="button" onclick="document.getElementById('image').click()">Bild auswählen</button>
+        <br>
+        <input type="file" id="image" name="image">
+        <br>
+        <div id="image-container">
+          <img id="uploaded-image" src="#" alt="Uploaded Image" />
+        </div>
+        <input type="submit" value="Klassifizieren" class="button">
+        <br>
+        <h3>Answer:</h3>
+        <p id="predicted_class"></p>
+      </form>
+    </div>
+    
+    <script>
+        // Submit form data using AJAX
+        document.getElementById("form").addEventListener('submit', function(event){
+            event.preventDefault();
+            var form_data = new FormData(document.getElementById("form"));
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/predict', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById("predicted_class").innerHTML = response['prediction'];
+                }
+            };
+            xhr.send(form_data);
+        });
+        
+        // Show uploaded image
+        const imageInput = document.getElementById("image");
+        const uploadedImage = document.getElementById("uploaded-image");
+        const imageContainer = document.getElementById("image-container");
+        
+        imageInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.style.display = "block";
+                    imageContainer.style.display = "flex";
+                };
+                reader.readAsDataURL(file);
+            }
+            else {
+                uploadedImage.style.display = "none";
+                imageContainer.style.display = "none";
+            }
+        });
+    </script>
+  </body>
+</html>
