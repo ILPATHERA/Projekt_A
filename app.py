@@ -9,22 +9,22 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     
-    # Load the image and resize it
+    #Bild laden und formatieren
     image = Image.open(request.files['image'])
     image = image.resize((224, 224))
 
-    # Convert the image to a numpy array
+    #Bild zu Numpy array umwandeln
     image_array = np.array(image, dtype=np.float32) / 255.0
     image_array = np.transpose(image_array, (2, 0, 1))
     image_array = np.expand_dims(image_array, axis=0)
 
-    # Load the ONNX model and run inference
+    #ONNX-Modell laden und Prediction durchführen
     session = onnxruntime.InferenceSession('mobilenetv2-7.onnx')
     input_name = session.get_inputs()[0].name
     output_name = session.get_outputs()[0].name
     output = session.run([output_name], {input_name: image_array})
 
-    # Get the predicted class and print the output
+    #Prediction aus classification_labels.txt auslesen und ausgeben
     predicted_class = np.argmax(output)
 
     with open('classification_labels.txt', 'r') as f:
@@ -41,7 +41,8 @@ def indexPage():
 
 @app.route('/classify', methods=['POST'])
 def classify():
-    # Call predict function to get the prediction
+    
+    #Prediction ausführen
     predicted_class = predict().get_json()['prediction']
     return jsonify({'predicted_class': predicted_class})
 
