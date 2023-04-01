@@ -1,11 +1,15 @@
+
+#Importe
 from flask import Flask, render_template, request, jsonify
 import onnxruntime
 import numpy as np
 from PIL import Image
 from io import BytesIO
 
+#Flask App erstellen
 app = Flask(__name__)
 
+#Endpoint für Prediction
 @app.route('/predict', methods=['POST'])
 def predict():
     
@@ -13,7 +17,6 @@ def predict():
     image = Image.open(request.files['image'])
     image = image.resize((224, 224))
 
-  
     #Bild zu Numpy array umwandeln
     image_array = np.array(image, dtype=np.float32) / 255.0
     image_array = np.transpose(image_array, (2, 0, 1))
@@ -27,14 +30,14 @@ def predict():
 
     #Prediction aus classification_labels.txt auslesen und ausgeben
     predicted_class = np.argmax(output)
-
     with open('classification_labels.txt', 'r') as f:
         class_names = [line.strip() for line in f.readlines()]
 
-    #Ausgabe fomratieren
+    #Ausgabe formatieren
     predicted_class = class_names[predicted_class].rstrip(',')
-
     #print('Predicted class:', predicted_class)
+    
+    #als JSON ausgeben
     return jsonify({'prediction': predicted_class})
 
 @app.route("/", methods=['GET'])

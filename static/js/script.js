@@ -1,4 +1,7 @@
-        // Submit form data using AJAX
+        
+        
+        
+        //Formular (Bild) mit AJAX an Server senden
         document.getElementById("form").addEventListener('submit', function(event){
             event.preventDefault();
             var form_data = new FormData(document.getElementById("form"));
@@ -13,7 +16,7 @@
             xhr.send(form_data);
         });
         
-        // Show uploaded image
+        //hochgeladenes Bild anzeigen
         const imageInput = document.getElementById("image");
         const uploadedImage = document.getElementById("uploaded-image");
         const imageContainer = document.getElementById("image-container");
@@ -35,7 +38,8 @@
             }
         });
 
-    function showAnswer() {
-      document.getElementById("predicted_class").style.display = "block";
-      document.getElementsByTagName("h3")[0].style.display = "block";
-    }
+        // zeige Antwort nachdem auf "Klassifizieren" geklickt wurde
+        function showAnswer() {
+        document.getElementById("predicted_class").style.display = "block";
+        document.getElementsByTagName("h3")[0].style.display = "block";
+        }
