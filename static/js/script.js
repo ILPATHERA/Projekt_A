@@ -34,3 +34,8 @@
                 imageContainer.style.display = "none";
             }
         });
+
+    function showAnswer() {
+      document.getElementById("predicted_class").style.display = "block";
+      document.getElementsByTagName("h3")[0].style.display = "block";
+    }

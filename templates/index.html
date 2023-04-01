@@ -13,18 +13,22 @@
         <label for="image">Bitte Bild zum Klassifizieren auswählen:</label>
         <br>
         <button class="button" onclick="document.getElementById('image').click()">Bild auswählen</button>
-        <br>
+        <hr>
         <input type="file" id="image" name="image">
-        <br>
         <div id="image-container">
           <img id="uploaded-image" src="#" alt="Uploaded Image" />
         </div>
-        <input type="submit" value="Klassifizieren" class="button">
+        <hr>
+        <input type="submit" value="Klassifizieren" class="button" onclick="showAnswer()">
         <br>
-        <h3>Answer:</h3>
-        <p id="predicted_class"></p>
+        <h3 style="display:none">Dein Bild wurde klassifiziert als...</h3>
+        <p id="predicted_class" style="display:none"></p>
+        
+        <button class="button" onclick="location.reload()">Restart</button>
       </form>
     </div>
+    
+
   </body>
   <script src="../static/js/script.js"></script>
 </html>
