@@ -13,6 +13,7 @@ def predict():
     image = Image.open(request.files['image'])
     image = image.resize((224, 224))
 
+  
     #Bild zu Numpy array umwandeln
     image_array = np.array(image, dtype=np.float32) / 255.0
     image_array = np.transpose(image_array, (2, 0, 1))
@@ -30,7 +31,8 @@ def predict():
     with open('classification_labels.txt', 'r') as f:
         class_names = [line.strip() for line in f.readlines()]
 
-    predicted_class = class_names[predicted_class]    
+    #Ausgabe fomratieren
+    predicted_class = class_names[predicted_class].rstrip(',')
 
     #print('Predicted class:', predicted_class)
     return jsonify({'prediction': predicted_class})
@@ -38,13 +40,6 @@ def predict():
 @app.route("/", methods=['GET'])
 def indexPage():
     return render_template("index.html")
-
-@app.route('/classify', methods=['POST'])
-def classify():
-    
-    #Prediction ausführen
-    predicted_class = predict().get_json()['prediction']
-    return jsonify({'predicted_class': predicted_class})
 
 if __name__ == '__main__':
     app.run(debug=True)
