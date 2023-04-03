@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 import onnxruntime
 import numpy as np
 from PIL import Image
-from io import BytesIO
+
 
 #Flask App erstellen
 app = Flask(__name__)
